@@ -5,7 +5,7 @@ const dummyPgConfig = {
   user: '',
   password: ''
 };
-const prodDbConnection = process.env.DATABASE_URL || localPgConnection;
+const prodDbConnection = process.env.DATABASE_URL || dummyPgConfig;
 
 module.exports = {
   development: {
