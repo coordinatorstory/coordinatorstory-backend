@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 
 const authRouter = express.Router();
 
-const { authenticate, generateToken } = require('../auth/authenticate');
+const { authMiddleware, generateToken } = require('../auth/authentication');
 
 // const USERS_TABLE = 'users';
 
