@@ -3,7 +3,7 @@ const db = require('../data/db');
 
 const storiesRouter = express.Router();
 
-authRouter.post('/stories', getStories);
+storiesRouter.post('/stories', getStories);
 
 async function getStories(req, res) {}
 
