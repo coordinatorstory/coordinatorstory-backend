@@ -3,22 +3,22 @@ const db = require('../data/db');
 
 const storiesRouter = express.Router();
 
-// GET /stories -> all stories for user logged in, all for not logged in, by country with query string
-// POST /stories -> create story
-
-// GET /stories/<id> -> single story
-// PUT /stories/<id> -> update story, protected
-// DELETE /stories/<id> -> delete story, protected
-
 storiesRouter.get('/', getStories);
+
+module.exports = storiesRouter;
 
 async function getStories(req, res) {
   try {
-    const stories = await db.stories.getAll();
-    res.status(200).json(stories);
+    const { country } = req.query;
+    if (country) {
+      console.log(country);
+      const stories = await db.stories.getCountryStories(country);
+      res.status(200).json(stories);
+    } else {
+      const stories = await db.stories.getAll();
+      res.status(200).json(stories);
+    }
   } catch (error) {
     res.status(500).json({ error: 'Cannot get stories.' });
   }
 }
-
-module.exports = storiesRouter;
