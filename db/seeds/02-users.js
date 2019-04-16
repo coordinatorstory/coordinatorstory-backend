@@ -1,13 +1,23 @@
+const faker = require('faker');
+const bcrypt = require('bcryptjs');
 
-exports.seed = function(knex, Promise) {
-  // Deletes ALL existing entries
-  return knex('table_name').del()
-    .then(function () {
-      // Inserts seed entries
-      return knex('table_name').insert([
-        {id: 1, colName: 'rowValue1'},
-        {id: 2, colName: 'rowValue2'},
-        {id: 3, colName: 'rowValue3'}
-      ]);
-    });
+const createUser = () => ({
+  username: faker.internet.userName(),
+  password: bcrypt.hashSync('password', 12),
+  first_name: faker.name.firstName(),
+  last_name: faker.name.lastName(),
+  email: faker.internet.email(),
+  title: faker.name.title()
+});
+
+const buildUsers = (count = 10) => {
+  const users = [];
+  for (let i = 0; i < count; i++) {
+    users.push(createUser());
+  }
+  return users;
+};
+
+exports.seed = function(knex) {
+  return knex('users').insert(buildUsers());
 };
