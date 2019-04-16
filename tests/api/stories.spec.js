@@ -9,6 +9,17 @@ describe('Story routes', () => {
       expect(res.status).toBe(200);
     });
 
+    it('should respond with 404 when request method is not GET', async () => {
+      let res = await request(server).post('/api/stories');
+      expect(res.status).toBe(404);
+      res = await request(server).put('/api/stories');
+      expect(res.status).toBe(404);
+      res = await request(server).patch('/api/stories');
+      expect(res.status).toBe(404);
+      res = await request(server).delete('/api/stories');
+      expect(res.status).toBe(404);
+    });
+
     it('should return all stories', async () => {
       const stories = await db.stories.getAll();
       let res = await request(server).get('/api/stories');
