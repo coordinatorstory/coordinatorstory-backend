@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const db = require('../data/db');
+const { validateUser } = require('./validators');
 const { generateToken } = require('../auth/authentication');
 
 const authRouter = express.Router();
@@ -11,8 +12,11 @@ authRouter.post('/login', login);
 async function register(req, res) {
   try {
     let user = req.body;
-    if (!user.username || !user.password) {
-      res.status(400).json({ error: 'Username and password are required.' });
+    const { error } = validateUser(user);
+    if (error) {
+      res.status(400).json({
+        error: error.details[0].message
+      });
     } else {
       const hash = await bcrypt.hash(user.password, 12);
       user.password = hash;
