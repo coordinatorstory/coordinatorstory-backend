@@ -3,7 +3,14 @@ exports.up = function(knex) {
     stories.increments();
     stories.string('title', 255).notNullable();
     stories.string('country', 255).notNullable();
-    stories.text('description', 255).notNullable();
+    stories.text('description').notNullable();
+    stories
+      .integer('user_id')
+      .unsigned()
+      .references('id')
+      .inTable('users')
+      .onDelete('CASCADE')
+      .onUpdate('CASCADE');
     stories.timestamps(true, true);
   });
 };

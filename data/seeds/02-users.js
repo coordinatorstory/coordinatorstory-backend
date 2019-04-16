@@ -11,7 +11,16 @@ const createUser = () => ({
 });
 
 const buildUsers = (count = 10) => {
-  const users = [];
+  const users = [
+    {
+      username: 'testuser',
+      password: bcrypt.hashSync('password', 12),
+      first_name: 'Test',
+      last_name: 'User',
+      email: 'test@mail.com',
+      title: 'Tester'
+    }
+  ];
   for (let i = 0; i < count; i++) {
     users.push(createUser());
   }

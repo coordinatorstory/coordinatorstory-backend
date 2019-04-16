@@ -11,36 +11,37 @@ module.exports = {
   development: {
     client: 'sqlite3',
     connection: {
-      filename: './db/stories.db3'
+      filename: './data/stories.db3'
     },
     useNullAsDefault: true,
     migrations: {
-      directory: './db/migrations',
+      directory: './data/migrations',
       tableName: 'dbmigrations'
     },
-    seeds: { directory: './db/seeds' }
+    seeds: { directory: './data/seeds' }
   },
   testing: {
     client: 'sqlite3',
+    // debug: true,
     connection: {
-      filename: './db/stories-testing.db3'
+      filename: './data/stories-testing.db3'
     },
     useNullAsDefault: true,
     migrations: {
-      directory: './db/migrations',
+      directory: './data/migrations',
       tableName: 'dbmigrations'
     },
-    seeds: { directory: './db/seeds' }
+    seeds: { directory: './data/seeds' }
   },
   production: {
     client: 'postgresql',
     connection: prodDbConnection,
     migrations: {
-      directory: './db/migrations',
+      directory: './data/migrations',
       tableName: 'dbmigrations'
     },
     seeds: {
-      directory: './db/seeds'
+      directory: './data/seeds'
     }
   }
 };
