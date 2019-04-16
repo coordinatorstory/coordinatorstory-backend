@@ -21,8 +21,8 @@ describe('Auth routes', () => {
     it('should register a new user', async () => {
       let res = await request(server)
         .post('/api/auth/register')
-        .send(mockUser);
-      expect(res.status).toBe(201);
+        .send(mockUser)
+        .expect(201);
     });
 
     it('should respond with 400 when not required fields are absent', async () => {
@@ -30,8 +30,8 @@ describe('Auth routes', () => {
         .post('/api/auth/register')
         .send({
           username: 'InvalidUser'
-        });
-      expect(res.status).toBe(400);
+        })
+        .expect(400);
     });
   });
 
@@ -42,8 +42,8 @@ describe('Auth routes', () => {
         .send({
           username: mockUser.username,
           password: mockUser.password
-        });
-      expect(res.status).toBe(200);
+        })
+        .expect(200);
     });
 
     it('should respond with 401 when credentials are invalid', async () => {
@@ -52,15 +52,15 @@ describe('Auth routes', () => {
         .send({
           username: mockUser.username,
           password: 'bad-password'
-        });
-      expect(res.status).toBe(401);
+        })
+        .expect(401);
       res = await request(server)
         .post('/api/auth/login')
         .send({
           username: 'nonexistentUser',
           password: mockUser.password
-        });
-      expect(res.status).toBe(401);
+        })
+        .expect(401);
     });
   });
 });
