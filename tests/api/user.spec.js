@@ -10,7 +10,7 @@ describe('User routes', () => {
     title: `${faker.name.firstName()}'s story`,
     country: 'Ecuador',
     description: faker.lorem.sentences(4),
-    user_id: faker.random.number({ min: 1, max: 10 })
+    user_id: userId
   };
 
   beforeAll(async () => {
@@ -72,15 +72,17 @@ describe('User routes', () => {
 
         expect(res.body).toEqual(
           expect.objectContaining({
-            title: expect.toEqual(mockStory.title),
-            country: expect.toEqual(mockStory.country),
-            description: expect.toEqual(mockStory.description),
-            user_id: expect.toEqual(mockStory.user_id)
+            title: mockStory.title,
+            country: mockStory.country,
+            description: mockStory.description,
+            user_id: mockStory.user_id,
+            created_at: expect.any(String),
+            updated_at: expect.any(String),
+            id: expect.any(Number)
           })
         );
 
         createdStoryId = res.body.id;
-        console.log(createdStoryId);
 
         const userStoriesUpdated = await db.stories.getUserStories(userId);
         expect(userStoriesUpdated).toHaveLength(userStories.length + 1);
