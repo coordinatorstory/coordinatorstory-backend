@@ -9,10 +9,18 @@ describe('Story routes', () => {
       expect(res.status).toBe(200);
     });
 
-    it('should return all stories when not logged in', async () => {
+    it('should return all stories', async () => {
       const stories = await db.stories.getAll();
       let res = await request(server).get('/api/stories');
       expect(res.body).toHaveLength(stories.length);
+    });
+
+    it('should return stories by country with query param', async () => {
+      const story = await db.stories.getBy({ id: 34 });
+      const countryStories = await db.stories.getCountryStories(story.country);
+      const URICountry = encodeURIComponent(story.country);
+      let res = await request(server).get(`/api/stories?country=${URICountry}`);
+      expect(res.body).toHaveLength(countryStories.length);
     });
   });
 });
