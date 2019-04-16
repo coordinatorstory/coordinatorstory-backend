@@ -9,6 +9,8 @@ const authRouter = express.Router();
 authRouter.post('/register', register);
 authRouter.post('/login', login);
 
+module.exports = authRouter;
+
 async function register(req, res) {
   try {
     let user = req.body;
@@ -50,5 +52,3 @@ async function login(req, res) {
     res.status(500).json({ error: 'Cannot complete login.' });
   }
 }
-
-module.exports = authRouter;
