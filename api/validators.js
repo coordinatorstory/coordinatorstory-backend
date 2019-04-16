@@ -24,6 +24,13 @@ const userSchema = {
   title: Joi.string().label('Title')
 };
 
+const storySchema = {
+  title: Joi.string().required(),
+  country: Joi.string().required(),
+  description: Joi.string().required()
+};
+
 module.exports = {
-  validateUser: user => Joi.validate(user, userSchema)
+  validateUser: user => Joi.validate(user, userSchema),
+  validateStory: story => Joi.validate(story, storySchema)
 };
