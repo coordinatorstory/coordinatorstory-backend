@@ -5,8 +5,6 @@ const dbEnv = process.env.DB_ENV || 'testing';
 
 const db = knex(config[dbEnv]);
 
-const usersTable = 'users';
-
 // general
 
 const getAllRecords = tableName => async () => {
@@ -50,13 +48,15 @@ const deleteRecord = tableName => async id => {
 
 // users
 
+const usersTable = 'users';
+
 const getUsers = async () => {
-  const users = await db(usersTable).select('id', 'username', 'department');
+  const users = await db(usersTable).select('id', 'username', 'title');
   return users;
 };
 
 module.exports = {
-  db,
+  knex,
   users: {
     getAll: getUsers,
     getAllBy: getAllRecordsBy(usersTable),
