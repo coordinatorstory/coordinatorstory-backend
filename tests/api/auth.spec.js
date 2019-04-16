@@ -17,7 +17,7 @@ describe('Auth routes', () => {
     await db.users.delete(registeredUser.id);
   });
 
-  describe('Register POST /api/auth/register', () => {
+  describe('POST /api/auth/register', () => {
     it('should register a new user', async () => {
       let res = await request(server)
         .post('/api/auth/register')
@@ -35,7 +35,7 @@ describe('Auth routes', () => {
     });
   });
 
-  describe('Login POST /api/auth/login', () => {
+  describe('POST /api/auth/login', () => {
     it('should allow a user to log in', async () => {
       let res = await request(server)
         .post('/api/auth/login')
