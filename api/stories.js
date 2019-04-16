@@ -14,13 +14,8 @@ storiesRouter.get('/', getStories);
 
 async function getStories(req, res) {
   try {
-    if (!req.user) {
-      const stories = await db.stories.getAll();
-      res.status(200).json(stories);
-    } else {
-      const stories = await db.stories.getAllBy({ user_id: req.user.userId });
-      res.status(200).json(stories);
-    }
+    const stories = await db.stories.getAll();
+    res.status(200).json(stories);
   } catch (error) {
     res.status(500).json({ error: 'Cannot get stories.' });
   }
