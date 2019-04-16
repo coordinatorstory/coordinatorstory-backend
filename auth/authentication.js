@@ -11,7 +11,7 @@ module.exports = {
 function generateToken(user) {
   const { id, username } = user;
   const payload = {
-    userId: id,
+    id,
     username
   };
   const options = {
