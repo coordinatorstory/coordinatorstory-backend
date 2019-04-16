@@ -31,7 +31,9 @@ const getRecordBy = tableName => async filter => {
 
 const createRecord = tableName => async record => {
   const [newRecordId] = await db(tableName).insert(record);
-  const newRecord = await db(tableName).where({ id: newRecordId });
+  const newRecord = await db(tableName)
+    .where({ id: newRecordId })
+    .first();
   return newRecord;
 };
 
