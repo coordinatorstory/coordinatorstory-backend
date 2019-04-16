@@ -1,5 +1,5 @@
 const express = require('express');
-// const db = require('../database/dbConfig');
+const db = require('../data/db');
 
 const storiesRouter = express.Router();
 
