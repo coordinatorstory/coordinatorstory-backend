@@ -56,6 +56,16 @@ const getUsers = async () => {
   return users;
 };
 
+// stories
+
+const getAllStories = async () => {
+  return db(storiesTable).select('id', 'title', 'country', 'description');
+};
+
+const getUserStories = async id => {
+  return db(storiesTable).where({ user_id: id });
+};
+
 module.exports = {
   knex,
   users: {
@@ -67,7 +77,8 @@ module.exports = {
     delete: deleteRecord(usersTable)
   },
   stories: {
-    getAll: getAllRecords(storiesTable),
+    getAll: getAllStories,
+    getUserStories,
     getAllBy: getAllRecordsBy(storiesTable),
     getBy: getRecordBy(storiesTable),
     create: createRecord(storiesTable),
