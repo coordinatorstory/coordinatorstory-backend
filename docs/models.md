@@ -1,0 +1,15 @@
+- User
+  - id INT
+  - email STRING
+  - password STRING
+  - title STRING
+  - role STRING (coordinator, donor)
+  - created_at DATE
+
+- Story
+  - id INT
+  - title STRING
+  - country STRING
+  - description TEXT
+  - created_at DATE
+  - updated_at DATE
