@@ -3,7 +3,7 @@ const db = require('../data/db');
 
 const usersRouter = express.Router();
 
-usersRouter.get('/:username/stories', getUserStories);
+usersRouter.get('/stories', getUserStories);
 
 async function getUserStories(req, res) {
   try {

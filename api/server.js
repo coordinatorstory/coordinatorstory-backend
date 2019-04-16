@@ -11,10 +11,10 @@ server.use(express.json());
 
 const authRouter = require('./auth');
 const storiesRouter = require('./stories');
-const usersRouter = require('./users');
+const userRouter = require('./user');
 
 server.use('/api/auth', authRouter);
 server.use('/api/stories', storiesRouter);
-server.use('/api/users', authMiddleware, usersRouter);
+server.use('/api/user', authMiddleware, userRouter);
 
 module.exports = server;
