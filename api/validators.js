@@ -27,7 +27,8 @@ const userSchema = {
 const storySchema = {
   title: Joi.string().required(),
   country: Joi.string().required(),
-  description: Joi.string().required()
+  description: Joi.string().required(),
+  user_id: Joi.number().required()
 };
 
 module.exports = {
