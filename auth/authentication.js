@@ -25,10 +25,9 @@ function authMiddleware(req, res, next) {
 
   if (token) {
     jwt.verify(token, jwtKey, (err, decoded) => {
-      if (err) return res.status(401).json(err);
-
+      if (err)
+        return res.status(401).json({ error: 'Not authorized. Log in to access this resource' });
       req.decoded = decoded;
-
       next();
     });
   } else {
