@@ -11,7 +11,7 @@ module.exports = {
 function generateToken(user) {
   const { id, username } = user;
   const payload = {
-    subject: id,
+    userId: id,
     username
   };
   const options = {
@@ -27,7 +27,7 @@ function authMiddleware(req, res, next) {
     jwt.verify(token, jwtKey, (err, decoded) => {
       if (err)
         return res.status(401).json({ error: 'Not authorized. Log in to access this resource' });
-      req.decoded = decoded;
+      req.user = decoded;
       next();
     });
   } else {
