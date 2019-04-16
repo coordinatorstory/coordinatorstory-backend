@@ -66,6 +66,10 @@ const getUserStories = async id => {
   return db(storiesTable).where({ user_id: id });
 };
 
+const getCountryStories = async country => {
+  return db(storiesTable).where('country', 'like', `%${country}%`);
+};
+
 module.exports = {
   knex,
   users: {
@@ -79,6 +83,7 @@ module.exports = {
   stories: {
     getAll: getAllStories,
     getUserStories,
+    getCountryStories,
     getAllBy: getAllRecordsBy(storiesTable),
     getBy: getRecordBy(storiesTable),
     create: createRecord(storiesTable),
