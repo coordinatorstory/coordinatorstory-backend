@@ -11,11 +11,7 @@ server.use(express.json());
 const authRouter = require('./auth');
 const storiesRouter = require('./stories');
 
-server.use(authRouter);
-server.use(storiesRouter);
-
-server.get('/', async (req, res) => {
-  res.status(200).json('It works!');
-});
+server.use('/api/auth', authRouter);
+server.use('/api/stories', storiesRouter);
 
 module.exports = server;
