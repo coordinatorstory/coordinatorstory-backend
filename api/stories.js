@@ -11,7 +11,6 @@ async function getStories(req, res) {
   try {
     const { country } = req.query;
     if (country) {
-      console.log(country);
       const stories = await db.stories.getCountryStories(country);
       res.status(200).json(stories);
     } else {
