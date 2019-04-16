@@ -1,19 +1,38 @@
 const faker = require('faker');
 
-const createRecipe = () => ({
-  name: `${faker.name.firstName()}'s ${faker.lorem.words(2)}`,
-  method: faker.lorem.sentences(4),
-  dish_id: faker.random.number({
-    min: 1,
-    max: 11
-  })
+const countries = [
+  'Bolivia',
+  'Brazil',
+  'Cambodia',
+  'Colombia',
+  'Ecuador',
+  'El Salvador',
+  'Ghana',
+  'Guatemala',
+  'Haiti',
+  'Honduras',
+  'Kiribati',
+  'Madagascar',
+  'Mongolia',
+  'Nicaragua',
+  'Paraguay',
+  'Peru',
+  'Philippines',
+  'Sierra Leone',
+  'Zimbabwe'
+];
+
+const createStory = () => ({
+  title: `${faker.name.firstName()}'s story`,
+  country: faker.random.arrayElement(countries),
+  description: faker.lorem.sentences(4)
 });
 
-const buildRecipes = (count = 50) =>
+const buildStories = (count = 150) =>
   Array(count)
     .fill(null)
-    .map(i => createRecipe());
+    .map(i => createStory());
 
 exports.seed = function(knex) {
-  return knex('recipes').insert(buildRecipes());
+  return knex('stories').insert(buildStories());
 };
