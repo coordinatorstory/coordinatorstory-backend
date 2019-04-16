@@ -22,6 +22,7 @@ module.exports = {
   },
   testing: {
     client: 'sqlite3',
+    // debug: true,
     connection: {
       filename: './data/stories-testing.db3'
     },
