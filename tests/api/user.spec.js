@@ -61,7 +61,7 @@ describe('User routes', () => {
         await db.stories.delete(createdStoryId);
       });
 
-      it('should create a story for a user', async () => {
+      it('should create a story', async () => {
         const userStories = await db.stories.getUserStories(userId);
 
         let res = await request(server)
@@ -137,4 +137,51 @@ describe('User routes', () => {
     });
   });
 
+  describe('DELETE /api/user/stories/:id', () => {
+    describe('when not logged in', () => {
+      it('should respond with 401', async () => {
+        let res = await request(server)
+          .delete('/api/user/stories/5')
+          .expect(401);
+      });
+    });
+
+    describe('when logged in', () => {
+      it('should delete a story that belongs to a user', async () => {
+        const userStories = await db.stories.getUserStories(userId);
+
+        let res1 = await request(server)
+          .post('/api/user/stories')
+          .set('Authorization', userToken)
+          .send(mockStory)
+          .expect(201);
+
+        const storyId = res1.body.id;
+
+        let res2 = await request(server)
+          .delete(`/api/user/stories/${storyId}`)
+          .set('Authorization', userToken)
+          .expect(204);
+
+        const userStoriesAfterDelete = await db.stories.getUserStories(userId);
+        expect(userStoriesAfterDelete).toHaveLength(userStories.length);
+      });
+
+      it('should not delete a story that does not belong to a user', async () => {
+        const allStories = await db.stories.getAll();
+        const storyId = allStories.filter(s => s.id !== userId)[0].id;
+        let res = await request(server)
+          .delete(`/api/user/stories/${storyId}`)
+          .set('Authorization', userToken)
+          .expect(404);
+      });
+
+      it('should not delete a story that does not exist', async () => {
+        let res = await request(server)
+          .delete(`/api/user/stories/123456789`)
+          .set('Authorization', userToken)
+          .expect(404);
+      });
+    });
+  });
 });
