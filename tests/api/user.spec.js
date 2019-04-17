@@ -61,7 +61,7 @@ describe('User routes', () => {
         await db.stories.delete(createdStoryId);
       });
 
-      it('should create a story for a user', async () => {
+      it('should create a story', async () => {
         const userStories = await db.stories.getUserStories(userId);
 
         let res = await request(server)
@@ -97,6 +97,148 @@ describe('User routes', () => {
           })
           .expect(400);
       });
+    });
+  });
+
+  describe('GET /api/user/stories/:id', () => {
+    describe('when not logged in', () => {
+      it('should respond with 401', async () => {
+        let res = await request(server)
+          .get('/api/user/stories/5')
+          .expect(401);
+      });
+    });
+
+    describe('when logged in', () => {
+      it('should get a story that belongs to a user', async () => {
+        const userStories = await db.stories.getUserStories(userId);
+        const storyId = userStories[0].id;
+        let res = await request(server)
+          .get(`/api/user/stories/${storyId}`)
+          .set('Authorization', userToken)
+          .expect(200);
+      });
+
+      it('should not get a story that does not belong to a user', async () => {
+        const allStories = await db.stories.getAll();
+        const storyId = allStories.filter(s => s.id !== userId)[0].id;
+        let res = await request(server)
+          .get(`/api/user/stories/${storyId}`)
+          .set('Authorization', userToken)
+          .expect(404);
+      });
+
+      it('should not get a story that does not exist', async () => {
+        let res = await request(server)
+          .get(`/api/user/stories/123456789`)
+          .set('Authorization', userToken)
+          .expect(404);
+      });
+    });
+  });
+
+  describe('DELETE /api/user/stories/:id', () => {
+    describe('when not logged in', () => {
+      it('should respond with 401', async () => {
+        let res = await request(server)
+          .delete('/api/user/stories/5')
+          .expect(401);
+      });
+    });
+
+    describe('when logged in', () => {
+      it('should delete a story that belongs to a user', async () => {
+        const userStories = await db.stories.getUserStories(userId);
+
+        let res = await request(server)
+          .post('/api/user/stories')
+          .set('Authorization', userToken)
+          .send(mockStory)
+          .expect(201);
+
+        const storyId = res.body.id;
+
+        await request(server)
+          .delete(`/api/user/stories/${storyId}`)
+          .set('Authorization', userToken)
+          .expect(204);
+
+        const userStoriesAfterDelete = await db.stories.getUserStories(userId);
+        expect(userStoriesAfterDelete).toHaveLength(userStories.length);
+      });
+
+      it('should not delete a story that does not belong to a user', async () => {
+        const allStories = await db.stories.getAll();
+        const storyId = allStories.filter(s => s.id !== userId)[0].id;
+        let res = await request(server)
+          .delete(`/api/user/stories/${storyId}`)
+          .set('Authorization', userToken)
+          .expect(404);
+      });
+
+      it('should not delete a story that does not exist', async () => {
+        let res = await request(server)
+          .delete(`/api/user/stories/123456789`)
+          .set('Authorization', userToken)
+          .expect(404);
+      });
+    });
+  });
+
+  describe('PUT /api/user/stories/:id', () => {
+    describe('when not logged in', () => {
+      it('should respond with 401', async () => {
+        let res = await request(server)
+          .put('/api/user/stories/5')
+          .expect(401);
+      });
+    });
+
+    describe('when logged in', () => {
+      it('should update a story that belongs to a user', async () => {
+        const userStories = await db.stories.getUserStories(userId);
+        const story = userStories[0];
+        await request(server)
+          .put(`/api/user/stories/${story.id}`)
+          .set('Authorization', userToken)
+          .send({
+            title: story.title,
+            country: story.country,
+            description: story.description,
+            user_id: story.user_id
+          })
+          .expect(204);
+      });
+
+      it('should should validate a story to be updated', async () => {
+        const userStories = await db.stories.getUserStories(userId);
+        const storyId = userStories[0].id;
+        await request(server)
+          .put(`/api/user/stories/${storyId}`)
+          .set('Authorization', userToken)
+          .send({
+            title: 'Story with invalid data'
+          })
+          .expect(400);
+      });
+
+      it('should not update a story that does not belong to a user', async () => {
+        const allStories = await db.stories.getAll();
+        const story = allStories.filter(s => s.id !== userId)[0];
+        console.log(story);
+        await request(server)
+          .put(`/api/user/stories/${story.id}`)
+          .set('Authorization', userToken)
+          .send({
+            title: story.title,
+            country: story.country,
+            description: story.description,
+            user_id: 123456
+          })
+          .expect(404);
+      });
+
+      it('should not update a story that does not exist', async () => {});
     });
   });
 });

@@ -71,7 +71,14 @@ const getUserStories = async id => {
 };
 
 const getCountryStories = async country => {
-  return db(storiesTable).where('country', 'like', `%${country}%`);
+  return db(storiesTable).whereRaw(`lower(country) like '%' || ? || '%'`, country.toLowerCase());
+};
+
+const updateStory = async (userId, storyId, storyUpdates) => {
+  const updatedCount = await db(storiesTable)
+    .where({ id: storyId, user_id: userId })
+    .update(storyUpdates);
+  return updatedCount;
 };
 
 module.exports = {
@@ -91,7 +98,7 @@ module.exports = {
     getAllBy: getAllRecordsBy(storiesTable),
     getBy: getRecordBy(storiesTable),
     create: createRecord(storiesTable),
-    update: updateRecord(storiesTable),
+    update: updateStory,
     delete: deleteRecord(storiesTable)
   }
 };
