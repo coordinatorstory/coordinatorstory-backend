@@ -99,4 +99,42 @@ describe('User routes', () => {
       });
     });
   });
+
+  describe('GET /api/user/stories/:id', () => {
+    describe('when not logged in', () => {
+      it('should respond with 401', async () => {
+        let res = await request(server)
+          .get('/api/user/stories/5')
+          .expect(401);
+      });
+    });
+
+    describe('when logged in', () => {
+      it('should get a story that belongs to a user', async () => {
+        const userStories = await db.stories.getUserStories(userId);
+        const storyId = userStories[0].id;
+        let res = await request(server)
+          .get(`/api/user/stories/${storyId}`)
+          .set('Authorization', userToken)
+          .expect(200);
+      });
+
+      it('should not get a story that does not belong to a user', async () => {
+        const allStories = await db.stories.getAll();
+        const storyId = allStories.filter(s => s.id !== userId)[0].id;
+        let res = await request(server)
+          .get(`/api/user/stories/${storyId}`)
+          .set('Authorization', userToken)
+          .expect(404);
+      });
+
+      it('should not get a story that does not exist', async () => {
+        let res = await request(server)
+          .get(`/api/user/stories/123456789`)
+          .set('Authorization', userToken)
+          .expect(404);
+      });
+    });
+  });
+
 });
