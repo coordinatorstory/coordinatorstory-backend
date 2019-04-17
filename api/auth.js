@@ -1,12 +1,13 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const db = require('../data/db');
-const { validateUser } = require('./validators');
+const validator = require('../middleware/requestValidator');
+const { userSchema } = require('../data/schemas');
 const { generateToken } = require('../auth/authentication');
 
 const authRouter = express.Router();
 
-authRouter.post('/register', register);
+authRouter.post('/register', validator(userSchema), register);
 authRouter.post('/login', login);
 
 module.exports = authRouter;
@@ -14,25 +15,19 @@ module.exports = authRouter;
 async function register(req, res) {
   try {
     let user = req.body;
-    const { error } = validateUser(user);
-    if (error) {
-      res.status(400).json({
-        error: error.details[0].message
-      });
+    const existingUser = await db.users.getBy({ username: user.username });
+
+    if (existingUser) {
+      res.status(400).json({ error: 'User already registered.' });
     } else {
-      const existingUser = await db.users.getBy({ username: user.username });
-      if (existingUser) {
-        res.status(400).json({ error: 'User already registered.' });
-      } else {
-        const hash = await bcrypt.hash(user.password, 12);
-        user.password = hash;
-        const newUser = await db.users.create(user);
-        const token = generateToken(newUser);
-        res.status(201).json({
-          message: `User registered. Welcome ${newUser.username}.`,
-          token
-        });
-      }
+      const hash = await bcrypt.hash(user.password, 12);
+      user.password = hash;
+      const newUser = await db.users.create(user);
+      const token = generateToken(newUser);
+      res.status(201).json({
+        message: `User registered. Welcome ${newUser.username}.`,
+        token
+      });
     }
   } catch (error) {
     console.log(error);

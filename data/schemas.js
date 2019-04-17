@@ -31,6 +31,6 @@ const storySchema = {
 };
 
 module.exports = {
-  validateUser: user => Joi.validate(user, userSchema),
-  validateStory: story => Joi.validate(story, storySchema)
+  userSchema,
+  storySchema
 };
