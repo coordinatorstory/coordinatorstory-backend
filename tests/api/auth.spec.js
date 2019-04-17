@@ -25,6 +25,13 @@ describe('Auth routes', () => {
         .expect(201);
     });
 
+    it('should respond with 400 when username already exists', async () => {
+      let res = await request(server)
+        .post('/api/auth/register')
+        .send(mockUser)
+        .expect(400);
+    });
+
     it('should respond with 400 when not required fields are absent', async () => {
       let res = await request(server)
         .post('/api/auth/register')
