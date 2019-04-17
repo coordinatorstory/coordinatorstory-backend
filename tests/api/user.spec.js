@@ -150,15 +150,15 @@ describe('User routes', () => {
       it('should delete a story that belongs to a user', async () => {
         const userStories = await db.stories.getUserStories(userId);
 
-        let res1 = await request(server)
+        let res = await request(server)
           .post('/api/user/stories')
           .set('Authorization', userToken)
           .send(mockStory)
           .expect(201);
 
-        const storyId = res1.body.id;
+        const storyId = res.body.id;
 
-        let res2 = await request(server)
+        await request(server)
           .delete(`/api/user/stories/${storyId}`)
           .set('Authorization', userToken)
           .expect(204);
@@ -182,6 +182,63 @@ describe('User routes', () => {
           .set('Authorization', userToken)
           .expect(404);
       });
+    });
+  });
+
+  describe('PUT /api/user/stories/:id', () => {
+    describe('when not logged in', () => {
+      it('should respond with 401', async () => {
+        let res = await request(server)
+          .put('/api/user/stories/5')
+          .expect(401);
+      });
+    });
+
+    describe('when logged in', () => {
+      it('should update a story that belongs to a user', async () => {
+        const userStories = await db.stories.getUserStories(userId);
+        const story = userStories[0];
+        await request(server)
+          .put(`/api/user/stories/${story.id}`)
+          .set('Authorization', userToken)
+          .send({
+            title: story.title,
+            country: story.country,
+            description: story.description,
+            user_id: story.user_id
+          })
+          .expect(204);
+      });
+
+      it('should should validate a story to be updated', async () => {
+        const userStories = await db.stories.getUserStories(userId);
+        const storyId = userStories[0].id;
+        await request(server)
+          .put(`/api/user/stories/${storyId}`)
+          .set('Authorization', userToken)
+          .send({
+            title: 'Story with invalid data'
+          })
+          .expect(400);
+      });
+
+      it('should not update a story that does not belong to a user', async () => {
+        const allStories = await db.stories.getAll();
+        const story = allStories.filter(s => s.id !== userId)[0];
+        console.log(story);
+        await request(server)
+          .put(`/api/user/stories/${story.id}`)
+          .set('Authorization', userToken)
+          .send({
+            title: story.title,
+            country: story.country,
+            description: story.description,
+            user_id: 123456
+          })
+          .expect(404);
+      });
+
+      it('should not update a story that does not exist', async () => {});
     });
   });
 });
