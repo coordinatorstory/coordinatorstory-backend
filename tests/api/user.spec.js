@@ -9,8 +9,7 @@ describe('User routes', () => {
   const mockStory = {
     title: `${faker.name.firstName()}'s story`,
     country: 'Ecuador',
-    description: faker.lorem.sentences(4),
-    user_id: userId
+    description: faker.lorem.sentences(4)
   };
 
   beforeAll(async () => {
@@ -75,7 +74,7 @@ describe('User routes', () => {
             title: mockStory.title,
             country: mockStory.country,
             description: mockStory.description,
-            user_id: mockStory.user_id,
+            user_id: userId,
             created_at: expect.any(String),
             updated_at: expect.any(String),
             id: expect.any(Number)
@@ -167,8 +166,7 @@ describe('User routes', () => {
           .send({
             title: story.title,
             country: story.country,
-            description: story.description,
-            user_id: story.user_id
+            description: story.description
           })
           .expect(204);
       });
@@ -194,8 +192,7 @@ describe('User routes', () => {
           .send({
             title: story.title,
             country: story.country,
-            description: story.description,
-            user_id: 123456
+            description: story.description
           })
           .expect(404);
       });

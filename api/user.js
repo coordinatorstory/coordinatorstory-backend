@@ -30,6 +30,7 @@ async function createUserStory(req, res) {
         error: error.details[0].message
       });
     } else {
+      story.user_id = req.user.id;
       const newStory = await db.stories.create(story);
       res.status(201).json(newStory);
     }
@@ -61,10 +62,12 @@ async function updateUserStory(req, res) {
     const storyUpdates = req.body;
     const { error } = validateStory(storyUpdates);
     if (error) {
+      // console.log(error);
       res.status(400).json({
         error: error.details[0].message
       });
     } else {
+      storyUpdates.user_id = req.user.id;
       const updatedCount = await db.stories.update(req.user.id, id, storyUpdates);
       if (!updatedCount) {
         res.status(404).json({ error: 'The story with the specified ID does not exist.' });
