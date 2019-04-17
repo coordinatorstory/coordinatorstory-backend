@@ -71,7 +71,7 @@ const getUserStories = async id => {
 };
 
 const getCountryStories = async country => {
-  return db(storiesTable).where('country', 'like', `%${country}%`);
+  return db(storiesTable).whereRaw(`lower(country) like '%' || ? || '%'`, country.toLowerCase());
 };
 
 module.exports = {
