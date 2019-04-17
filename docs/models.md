@@ -5,11 +5,13 @@
   - title STRING
   - role STRING (coordinator, donor)
   - created_at DATE
+  - updated_at DATE
 
 - Story
   - id INT
   - title STRING
   - country STRING
   - description TEXT
+  - user_id INT ref User.id
   - created_at DATE
   - updated_at DATE

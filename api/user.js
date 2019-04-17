@@ -17,6 +17,7 @@ async function getUserStories(req, res) {
     const stories = await db.stories.getUserStories(req.user.id);
     res.status(200).json(stories);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Cannot get stories.' });
   }
 }
@@ -31,6 +32,7 @@ async function getUserStory(req, res) {
       res.status(200).json(story);
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Cannot get story.' });
   }
 }
@@ -64,6 +66,7 @@ async function deleteUserStory(req, res) {
       res.status(204).end();
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Cannot delete story.' });
   }
 }
@@ -86,6 +89,7 @@ async function updateUserStory(req, res) {
       }
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Cannot update story.' });
   }
 }
