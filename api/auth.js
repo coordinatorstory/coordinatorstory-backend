@@ -30,6 +30,7 @@ async function register(req, res) {
       });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Cannot register new user.' });
   }
 }
@@ -49,6 +50,7 @@ async function login(req, res) {
       res.status(200).json({ message: `Welcome, ${user.username}.`, token });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Cannot complete login.' });
   }
 }

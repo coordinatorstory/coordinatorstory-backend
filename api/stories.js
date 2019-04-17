@@ -18,6 +18,7 @@ async function getStories(req, res) {
       res.status(200).json(stories);
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Cannot get stories.' });
   }
 }
