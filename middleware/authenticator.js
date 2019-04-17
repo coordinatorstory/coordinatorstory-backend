@@ -1,26 +1,7 @@
 const jwt = require('jsonwebtoken');
 
-const jwtKey =
-  process.env.JWT_SECRET || 'add a .env file to root of project with the JWT_SECRET variable';
-
-module.exports = {
-  generateToken,
-  authMiddleware
-};
-
-function generateToken(user) {
-  const { id, username } = user;
-  const payload = {
-    id,
-    username
-  };
-  const options = {
-    expiresIn: '1d'
-  };
-  return jwt.sign(payload, jwtKey, options);
-}
-
-function authMiddleware(req, res, next) {
+module.exports = (req, res, next) => {
+  const jwtKey = process.env.JWT_SECRET || 'set variable in .env in the project root';
   const token = req.get('Authorization');
 
   if (token) {
@@ -35,4 +16,4 @@ function authMiddleware(req, res, next) {
       error: 'No token provided, must be set on the Authorization Header'
     });
   }
-}
+};

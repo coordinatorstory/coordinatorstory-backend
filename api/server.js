@@ -2,9 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const { authMiddleware } = require('../auth/authentication');
+const authenticator = require('../middleware/authenticator');
+const requestErrorHandler = require('../middleware/requestErrorHandler');
 
 const server = express();
+
+require('express-async-errors');
 
 server.use(helmet());
 server.use(cors());
@@ -20,6 +23,9 @@ const userRouter = require('./user');
 
 server.use('/api/auth', authRouter);
 server.use('/api/stories', storiesRouter);
-server.use('/api/user', authMiddleware, userRouter);
+server.use('/api/user', authenticator, userRouter);
+
+// must come last
+server.use(requestErrorHandler);
 
 module.exports = server;

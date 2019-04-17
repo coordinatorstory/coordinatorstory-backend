@@ -32,7 +32,13 @@ module.exports = {
       directory: './data/migrations',
       tableName: 'dbmigrations'
     },
-    seeds: { directory: './data/seeds' }
+    seeds: { directory: './data/seeds' },
+    log: {
+      warn(message) {},
+      error(message) {},
+      deprecate(message) {},
+      debug(message) {}
+    }
   },
   production: {
     client: 'postgresql',
