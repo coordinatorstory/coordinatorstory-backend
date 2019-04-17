@@ -125,7 +125,7 @@ An array of Story objects or an empty array if no stories are found.
 
 #### Response
 
-A single Story object, or `404` id story does not exist.
+A single Story object, or `404` if story does not exist.
 
 ## Users (protected)
 
