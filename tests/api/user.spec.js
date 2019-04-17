@@ -225,7 +225,6 @@ describe('User routes', () => {
       it('should not update a story that does not belong to a user', async () => {
         const allStories = await db.stories.getAll();
         const story = allStories.filter(s => s.id !== userId)[0];
-        console.log(story);
         await request(server)
           .put(`/api/user/stories/${story.id}`)
           .set('Authorization', userToken)
