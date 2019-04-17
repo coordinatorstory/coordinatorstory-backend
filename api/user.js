@@ -5,7 +5,12 @@ const { validateStory } = require('./validators');
 const usersRouter = express.Router();
 
 usersRouter.get('/stories', getUserStories);
+usersRouter.get('/stories/:id', getUserStory);
 usersRouter.post('/stories', createUserStory);
+usersRouter.put('/stories/:id', updateUserStory);
+usersRouter.delete('/stories/:id', deleteUserStory);
+
+module.exports = usersRouter;
 
 async function getUserStories(req, res) {
   try {
@@ -13,6 +18,20 @@ async function getUserStories(req, res) {
     res.status(200).json(stories);
   } catch (error) {
     res.status(500).json({ error: 'Cannot get stories.' });
+  }
+}
+
+async function getUserStory(req, res) {
+  try {
+    const { id } = req.params;
+    const story = await db.stories.getBy({ id, user_id: req.user.id });
+    if (!story) {
+      res.status(404).json({ error: 'Story not found.' });
+    } else {
+      res.status(200).json(story);
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Cannot get story.' });
   }
 }
 
@@ -34,4 +53,39 @@ async function createUserStory(req, res) {
   }
 }
 
-module.exports = usersRouter;
+async function deleteUserStory(req, res) {
+  try {
+    const { id } = req.params;
+    const story = await db.stories.getBy({ id, user_id: req.user.id });
+    if (!story) {
+      res.status(404).json({ error: 'Story not found.' });
+    } else {
+      await db.stories.delete(id);
+      res.status(204).end();
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Cannot delete story.' });
+  }
+}
+
+async function updateUserStory(req, res) {
+  try {
+    const { id } = req.params;
+    const storyUpdates = req.body;
+    const { error } = validateStory(storyUpdates);
+    if (error) {
+      res.status(400).json({
+        error: error.details[0].message
+      });
+    } else {
+      const updatedCount = await db.stories.update(req.user.id, id, storyUpdates);
+      if (!updatedCount) {
+        res.status(404).json({ error: 'The story with the specified ID does not exist.' });
+      } else {
+        res.status(204).end();
+      }
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Cannot update story.' });
+  }
+}
