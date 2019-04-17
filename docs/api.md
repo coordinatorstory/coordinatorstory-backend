@@ -14,6 +14,10 @@
 1. Stories (public)
    - [Get all stories](#get-all-stories)
 1. Users (protected)
+   - [Get all user's stories](#get-all-users-stories)
+   - [Create a new story](#create-a-new-story)
+   - [Update a user's story](#update-a-users-story)
+   - [Delete a user's story](#delete-a-users-story)
 
 ## Requests & Responses
 
@@ -62,6 +66,8 @@ Requests to protected routes must include a valid encoded JWT string in the `Aut
 
 #### Response
 
+Returns welcome message and token, or `400` if request is invalid.
+
 | Property  | Description        |
 | --------- | ------------------ |
 | `message` | Welcome message    |
@@ -79,6 +85,8 @@ Requests to protected routes must include a valid encoded JWT string in the `Aut
 | `password` | String, min-length `6`, required               |
 
 #### Response
+
+Returns welcome message and token, or `401` if credentials are invalid.
 
 | Property  | Description        |
 | --------- | ------------------ |
@@ -117,15 +125,19 @@ An array of Story objects or an empty array if no stories are found.
 
 #### Response
 
-A single Story object.
+A single Story object, or `404` id story does not exist.
 
 ## Users (protected)
 
 See [Protected Routes](#protected-routes)
 
-### Get all stories that belongs to logged in user
+### Get all user's stories
 
 `GET /user/stories`
+
+#### Response
+
+An array of Story objects or an empty array if user has no stories.
 
 ### Create a new story
 
@@ -141,9 +153,9 @@ See [Protected Routes](#protected-routes)
 
 #### Response
 
-Returns the newly created story object.
+Returns the newly created story object, or `400` if request is invalid.
 
-### Update a story that belongs to logged in user
+### Update a user's story
 
 `PUT /user/stories/:storyId`
 
@@ -157,12 +169,12 @@ Returns the newly created story object.
 
 #### Response
 
-Returns an empty response with status `204`.
+Returns an empty response with status `204`, or `404` if story doesn't exist.
 
-### Delete a story that belongs to logged in user
+### Delete a user's story
 
 `DELETE /user/stories/:storyId`
 
 #### Response
 
-Returns an empty response with status `204`.
+Returns an empty response with status `204`, or `404` if story doesn't exist.
