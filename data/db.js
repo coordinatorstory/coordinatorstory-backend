@@ -74,6 +74,13 @@ const getCountryStories = async country => {
   return db(storiesTable).whereRaw(`lower(country) like '%' || ? || '%'`, country.toLowerCase());
 };
 
+const updateStory = async (userId, storyId, storyUpdates) => {
+  const updatedCount = await db(storiesTable)
+    .where({ id: storyId, user_id: userId })
+    .update(storyUpdates);
+  return updatedCount;
+};
+
 module.exports = {
   knex,
   users: {
@@ -91,7 +98,7 @@ module.exports = {
     getAllBy: getAllRecordsBy(storiesTable),
     getBy: getRecordBy(storiesTable),
     create: createRecord(storiesTable),
-    update: updateRecord(storiesTable),
+    update: updateStory,
     delete: deleteRecord(storiesTable)
   }
 };
