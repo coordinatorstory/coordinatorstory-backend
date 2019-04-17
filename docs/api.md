@@ -51,21 +51,21 @@ Requests to protected routes must include a valid encoded JWT string in the `Aut
 
 #### Request
 
-| Property   | Description                                                      |
-| ---------- | ---------------------------------------------------------------- |
-| username   | String, alphanumeric, min-length `3`, max-length `255`, required |
-| password   | String, min-length `6`, required                                 |
-| email      | Email address, required                                          |
-| first_name | String, required                                                 |
-| last_name  | String, required                                                 |
-| title      | String                                                           |
+| Property     | Description                                    |
+| ------------ | ---------------------------------------------- |
+| `username`   | String, alphanumeric, min-length `3`, required |
+| `password`   | String, min-length `6`, required               |
+| `email`      | Email address, required                        |
+| `first_name` | String, required                               |
+| `last_name`  | String, required                               |
+| `title`      | String                                         |
 
 #### Response
 
-| Property | Description        |
-| -------- | ------------------ |
-| message  | Welcome message    |
-| token    | Encoded JWT string |
+| Property  | Description        |
+| --------- | ------------------ |
+| `message` | Welcome message    |
+| `token`   | Encoded JWT string |
 
 ### Log in
 
@@ -73,17 +73,17 @@ Requests to protected routes must include a valid encoded JWT string in the `Aut
 
 #### Request
 
-| Property | Description                                                      |
-| -------- | ---------------------------------------------------------------- |
-| username | String, alphanumeric, min-length `3`, max-length `255`, required |
-| password | String, min-length `6`, required                                 |
+| Property   | Description                                    |
+| ---------- | ---------------------------------------------- |
+| `username` | String, alphanumeric, min-length `3`, required |
+| `password` | String, min-length `6`, required               |
 
 #### Response
 
-| Property | Description        |
-| -------- | ------------------ |
-| message  | Welcome message    |
-| token    | Encoded JWT string |
+| Property  | Description        |
+| --------- | ------------------ |
+| `message` | Welcome message    |
+| `token`   | Encoded JWT string |
 
 ## Stories (public)
 
@@ -99,12 +99,12 @@ Optional query string `country` to get stories by country. E.g. `/stories?countr
 
 An array of Story objects with the shape of:
 
-| Property    |
-| ----------- |
-| id          |
-| title       |
-| country     |
-| description |
+| Property      |
+| ------------- |
+| `id`          |
+| `title`       |
+| `country`     |
+| `description` |
 
 Or an empty array if no stories are found.
 
