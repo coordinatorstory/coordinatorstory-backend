@@ -8,8 +8,11 @@ const server = express();
 
 server.use(helmet());
 server.use(cors());
-server.use(morgan('short'));
 server.use(express.json());
+
+if (process.env.DB_ENV !== 'testing') {
+  server.use(morgan('short'));
+}
 
 const authRouter = require('./auth');
 const storiesRouter = require('./stories');
