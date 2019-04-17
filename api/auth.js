@@ -20,14 +20,19 @@ async function register(req, res) {
         error: error.details[0].message
       });
     } else {
-      const hash = await bcrypt.hash(user.password, 12);
-      user.password = hash;
-      const newUser = await db.users.create(user);
-      const token = generateToken(newUser);
-      res.status(201).json({
-        message: `User registered. Welcome ${newUser.username}.`,
-        token
-      });
+      const existingUser = await db.users.getBy({ username: user.username });
+      if (existingUser) {
+        res.status(400).json({ error: 'User already registered.' });
+      } else {
+        const hash = await bcrypt.hash(user.password, 12);
+        user.password = hash;
+        const newUser = await db.users.create(user);
+        const token = generateToken(newUser);
+        res.status(201).json({
+          message: `User registered. Welcome ${newUser.username}.`,
+          token
+        });
+      }
     }
   } catch (error) {
     console.log(error);

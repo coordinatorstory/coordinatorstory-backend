@@ -5,7 +5,6 @@ const { validateStory } = require('./validators');
 const usersRouter = express.Router();
 
 usersRouter.get('/stories', getUserStories);
-usersRouter.get('/stories/:id', getUserStory);
 usersRouter.post('/stories', createUserStory);
 usersRouter.put('/stories/:id', updateUserStory);
 usersRouter.delete('/stories/:id', deleteUserStory);
@@ -22,21 +21,6 @@ async function getUserStories(req, res) {
   }
 }
 
-async function getUserStory(req, res) {
-  try {
-    const { id } = req.params;
-    const story = await db.stories.getBy({ id, user_id: req.user.id });
-    if (!story) {
-      res.status(404).json({ error: 'Story not found.' });
-    } else {
-      res.status(200).json(story);
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: 'Cannot get story.' });
-  }
-}
-
 async function createUserStory(req, res) {
   try {
     const story = req.body;
@@ -46,6 +30,7 @@ async function createUserStory(req, res) {
         error: error.details[0].message
       });
     } else {
+      story.user_id = req.user.id;
       const newStory = await db.stories.create(story);
       res.status(201).json(newStory);
     }
@@ -77,10 +62,12 @@ async function updateUserStory(req, res) {
     const storyUpdates = req.body;
     const { error } = validateStory(storyUpdates);
     if (error) {
+      // console.log(error);
       res.status(400).json({
         error: error.details[0].message
       });
     } else {
+      storyUpdates.user_id = req.user.id;
       const updatedCount = await db.stories.update(req.user.id, id, storyUpdates);
       if (!updatedCount) {
         res.status(404).json({ error: 'The story with the specified ID does not exist.' });

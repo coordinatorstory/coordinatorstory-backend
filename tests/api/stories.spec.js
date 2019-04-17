@@ -40,4 +40,18 @@ describe('Story routes', () => {
       expect(res.body).toHaveLength(countryStories.length);
     });
   });
+
+  describe('GET /api/stories/:id', () => {
+    it('should get a story', async () => {
+      let res = await request(server)
+        .get('/api/stories/5')
+        .expect(200);
+    });
+
+    it('should not get a story that does not exist', async () => {
+      let res = await request(server)
+        .get(`/api/stories/123456789`)
+        .expect(404);
+    });
+  });
 });

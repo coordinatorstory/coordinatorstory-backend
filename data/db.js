@@ -62,10 +62,6 @@ const getUsers = async () => {
 
 // stories
 
-const getAllStories = async () => {
-  return db(storiesTable).select('id', 'title', 'country', 'description');
-};
-
 const getUserStories = async id => {
   return db(storiesTable).where({ user_id: id });
 };
@@ -92,7 +88,7 @@ module.exports = {
     delete: deleteRecord(usersTable)
   },
   stories: {
-    getAll: getAllStories,
+    getAll: getAllRecords(storiesTable),
     getUserStories,
     getCountryStories,
     getAllBy: getAllRecordsBy(storiesTable),

@@ -9,8 +9,7 @@ describe('User routes', () => {
   const mockStory = {
     title: `${faker.name.firstName()}'s story`,
     country: 'Ecuador',
-    description: faker.lorem.sentences(4),
-    user_id: userId
+    description: faker.lorem.sentences(4)
   };
 
   beforeAll(async () => {
@@ -75,7 +74,7 @@ describe('User routes', () => {
             title: mockStory.title,
             country: mockStory.country,
             description: mockStory.description,
-            user_id: mockStory.user_id,
+            user_id: userId,
             created_at: expect.any(String),
             updated_at: expect.any(String),
             id: expect.any(Number)
@@ -96,43 +95,6 @@ describe('User routes', () => {
             title: 'Story with invalid data'
           })
           .expect(400);
-      });
-    });
-  });
-
-  describe('GET /api/user/stories/:id', () => {
-    describe('when not logged in', () => {
-      it('should respond with 401', async () => {
-        let res = await request(server)
-          .get('/api/user/stories/5')
-          .expect(401);
-      });
-    });
-
-    describe('when logged in', () => {
-      it('should get a story that belongs to a user', async () => {
-        const userStories = await db.stories.getUserStories(userId);
-        const storyId = userStories[0].id;
-        let res = await request(server)
-          .get(`/api/user/stories/${storyId}`)
-          .set('Authorization', userToken)
-          .expect(200);
-      });
-
-      it('should not get a story that does not belong to a user', async () => {
-        const allStories = await db.stories.getAll();
-        const storyId = allStories.filter(s => s.id !== userId)[0].id;
-        let res = await request(server)
-          .get(`/api/user/stories/${storyId}`)
-          .set('Authorization', userToken)
-          .expect(404);
-      });
-
-      it('should not get a story that does not exist', async () => {
-        let res = await request(server)
-          .get(`/api/user/stories/123456789`)
-          .set('Authorization', userToken)
-          .expect(404);
       });
     });
   });
@@ -204,8 +166,7 @@ describe('User routes', () => {
           .send({
             title: story.title,
             country: story.country,
-            description: story.description,
-            user_id: story.user_id
+            description: story.description
           })
           .expect(204);
       });
@@ -225,15 +186,13 @@ describe('User routes', () => {
       it('should not update a story that does not belong to a user', async () => {
         const allStories = await db.stories.getAll();
         const story = allStories.filter(s => s.id !== userId)[0];
-        console.log(story);
         await request(server)
           .put(`/api/user/stories/${story.id}`)
           .set('Authorization', userToken)
           .send({
             title: story.title,
             country: story.country,
-            description: story.description,
-            user_id: 123456
+            description: story.description
           })
           .expect(404);
       });
