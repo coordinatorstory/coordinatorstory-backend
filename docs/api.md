@@ -4,12 +4,12 @@
 
 ## Contents
 
-1. [Requests & Responses](#requests--responses)
-1. [HTML Response Codes](#html-response-codes)
-1. [Example Error Message](#example-error-message)
-1. [Protected Routes](#protected-routes)
+1. [Requests & responses](#requests--responses)
+1. [HTML response codes](#html-response-codes)
+1. [Example error message](#example-error-message)
+1. [Protected routes](#protected-routes)
 1. Auth
-   - [Create User](#create-user)
+   - [Create user](#create-user)
    - [Log in](#log-in)
 1. Stories (public)
    - [Get all stories](#get-all-stories)
@@ -19,11 +19,11 @@
    - [Update a user's story](#update-a-users-story)
    - [Delete a user's story](#delete-a-users-story)
 
-## Requests & Responses
+## Requests & responses
 
 All responses come in JSON. All requests must include a `Content-Type` of `application/json` and the body must be valid JSON.
 
-## HTML Response Codes
+## HTML response codes
 
 | Code  | Description                                             |
 | ----- | ------------------------------------------------------- |
@@ -35,7 +35,7 @@ All responses come in JSON. All requests must include a `Content-Type` of `appli
 | `404` | Resource not found, error message returned              |
 | `500` | Server error, error message returned                    |
 
-## Example Error Message
+## Example error message
 
 Error messages will be returned the in the format of:
 
@@ -43,13 +43,13 @@ Error messages will be returned the in the format of:
 { "error": "Information about the error will be here." }
 ```
 
-## Protected Routes
+## Protected routes
 
 Requests to protected routes must include a valid encoded JWT string in the `Authorization` header. Unauthorized requests will receive a `401` response.
 
 ## Auth
 
-### Create User
+### Create user
 
 `POST /auth/register`
 
