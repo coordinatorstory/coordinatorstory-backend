@@ -23,7 +23,7 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
-    "test": "cross-env DB_ENV=testing jest --watch --verbose"
+    "test": "cross-env DB_ENV=testing jest --watch"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
