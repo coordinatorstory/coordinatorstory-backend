@@ -51,14 +51,14 @@ Requests to protected routes must include a valid encoded JWT string in the `Aut
 
 #### Request
 
-| Property     | Description                                    |
-| ------------ | ---------------------------------------------- |
-| `username`   | String, alphanumeric, min-length `3`, required |
-| `password`   | String, min-length `6`, required               |
-| `email`      | Email address, required                        |
-| `first_name` | String, required                               |
-| `last_name`  | String, required                               |
-| `title`      | String                                         |
+| Property     | Description                                                    |
+| ------------ | -------------------------------------------------------------- |
+| `username`   | String, alphanumeric, min-length `3`, must be unique, required |
+| `password`   | String, min-length `6`, required                               |
+| `email`      | Email address, required                                        |
+| `first_name` | String, required                                               |
+| `last_name`  | String, required                                               |
+| `title`      | String                                                         |
 
 #### Response
 
@@ -87,6 +87,18 @@ Requests to protected routes must include a valid encoded JWT string in the `Aut
 
 ## Stories (public)
 
+A Story object has the following properties:
+
+| Property      |
+| ------------- |
+| `id`          |
+| `title`       |
+| `country`     |
+| `description` |
+| `user_id`     |
+| `created_at`  |
+| `updated_at`  |
+
 ### Get all stories
 
 `GET /stories`
@@ -97,15 +109,60 @@ Optional query string `country` to get stories by country. E.g. `/stories?countr
 
 #### Response
 
-An array of Story objects with the shape of:
+An array of Story objects or an empty array if no stories are found.
 
-| Property      |
-| ------------- |
-| `id`          |
-| `title`       |
-| `country`     |
-| `description` |
+### Get a story by id
 
-Or an empty array if no stories are found.
+`GET /stories/:storyId`
+
+#### Response
+
+A single Story object.
 
 ## Users (protected)
+
+See [Protected Routes](#protected-routes)
+
+### Get all stories that belongs to logged in user
+
+`GET /user/stories`
+
+### Create a new story
+
+`POST /user/stories`
+
+#### Request
+
+| Property      | Description      |
+| ------------- | ---------------- |
+| `title`       | String, required |
+| `country`     | String, required |
+| `description` | String, required |
+
+#### Response
+
+Returns the newly created story object.
+
+### Update a story that belongs to logged in user
+
+`PUT /user/stories/:storyId`
+
+#### Request
+
+| Property      | Description      |
+| ------------- | ---------------- |
+| `title`       | String, required |
+| `country`     | String, required |
+| `description` | String, required |
+
+#### Response
+
+Returns an empty response with status `204`.
+
+### Delete a story that belongs to logged in user
+
+`DELETE /user/stories/:storyId`
+
+#### Response
+
+Returns an empty response with status `204`.
