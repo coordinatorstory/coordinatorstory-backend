@@ -1,1 +1,3 @@
-# Bountiful Children’s Foundation Stories
+# OurStory back end API
+
+[Documentation for the API](/docs/api.md)
