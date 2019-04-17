@@ -1,9 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const db = require('../data/db');
 const validator = require('../middleware/requestValidator');
 const { userSchema } = require('../data/schemas');
-const { generateToken } = require('../auth/authentication');
 
 const authRouter = express.Router();
 
@@ -11,6 +11,19 @@ authRouter.post('/register', validator(userSchema), register);
 authRouter.post('/login', login);
 
 module.exports = authRouter;
+
+function generateToken(user) {
+  const jwtKey = process.env.JWT_SECRET || 'set variable in .env in the project root';
+  const { id, username } = user;
+  const payload = {
+    id,
+    username
+  };
+  const options = {
+    expiresIn: '1d'
+  };
+  return jwt.sign(payload, jwtKey, options);
+}
 
 async function register(req, res) {
   try {
