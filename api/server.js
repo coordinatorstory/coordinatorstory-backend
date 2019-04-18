@@ -3,7 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const authenticator = require('../middleware/authenticator');
-const requestErrorHandler = require('../middleware/requestErrorHandler');
+const requestErrorHandler = require('../middleware/errorHandler');
 
 const server = express();
 

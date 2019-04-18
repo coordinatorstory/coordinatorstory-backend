@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../data/db');
-const validator = require('../middleware/requestValidator');
+const validator = require('../middleware/dataValidator');
 const { RequestError } = require('./errors');
 const { userSchema } = require('../data/schemas');
 
