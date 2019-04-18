@@ -1,7 +1,7 @@
 class RequestError extends Error {
   constructor(statusCode = 500, message) {
     super(message);
-    this.name = 'DatabaseError';
+    this.name = 'RequestError';
     this.statusCode = statusCode;
   }
 }
