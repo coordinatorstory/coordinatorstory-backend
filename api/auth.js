@@ -44,8 +44,7 @@ async function register(req, res) {
 
 async function login(req, res) {
   const { username, password } = req.body;
-  // TODO check: does this return null already if no user found?
-  const user = username ? await db.users.getBy({ username }) : null;
+  const user = await db.users.getBy({ username });
   const credentialsValid = user && password ? await bcrypt.compare(password, user.password) : false;
 
   if (!credentialsValid) throw new RequestError(401, 'Invalid Credentials.');
