@@ -1,6 +1,6 @@
 const request = require('supertest');
 const server = require('../../api/server');
-const db = require('../../data/db');
+const storiesData = require('../../data/stories');
 
 describe('Story routes', () => {
   describe('GET /api/stories', () => {
@@ -27,7 +27,7 @@ describe('Story routes', () => {
     });
 
     it('should return all stories', async () => {
-      const stories = await db.stories.getAll();
+      const stories = await storiesData.getAll();
       let res = await request(server)
         .get('/api/stories')
         .expect(200)
@@ -36,8 +36,8 @@ describe('Story routes', () => {
     });
 
     it('should return stories by country with query param', async () => {
-      const { country } = await db.stories.getBy({ id: 34 });
-      const countryStories = await db.stories.getCountryStories(country);
+      const { country } = await storiesData.getBy({ id: 34 });
+      const countryStories = await storiesData.getCountryStories(country);
       let res = await request(server)
         .get('/api/stories')
         .query({ country })

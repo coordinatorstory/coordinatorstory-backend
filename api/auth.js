@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require('../data/db');
+const usersData = require('../data/users');
 const validator = require('../middleware/dataValidator');
 const { RequestError } = require('../common/errors');
 const { userSchema } = require('../data/schemas');
@@ -28,13 +28,13 @@ function generateToken(user) {
 
 async function register(req, res) {
   let user = req.body;
-  const existingUser = await db.users.getBy({ username: user.username });
+  const existingUser = await usersData.getBy({ username: user.username });
 
   if (existingUser) throw new RequestError(400, 'User already registered.');
 
   const hash = await bcrypt.hash(user.password, 12);
   user.password = hash;
-  const newUser = await db.users.create(user);
+  const newUser = await usersData.create(user);
   const token = generateToken(newUser);
   res.status(201).json({
     message: `User registered. Welcome ${newUser.username}.`,
@@ -44,7 +44,7 @@ async function register(req, res) {
 
 async function login(req, res) {
   const { username, password } = req.body;
-  const user = await db.users.getBy({ username });
+  const user = await usersData.getBy({ username });
   const credentialsValid = user && password ? await bcrypt.compare(password, user.password) : false;
 
   if (!credentialsValid) throw new RequestError(401, 'Invalid Credentials.');

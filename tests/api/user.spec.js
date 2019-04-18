@@ -1,7 +1,8 @@
 const request = require('supertest');
 const faker = require('faker');
 const server = require('../../api/server');
-const db = require('../../data/db');
+const usersData = require('../../data/users');
+const storiesData = require('../../data/stories');
 
 describe('User routes', () => {
   const userId = 5;
@@ -13,7 +14,7 @@ describe('User routes', () => {
   };
 
   beforeAll(async () => {
-    const user = await db.users.getBy({ id: userId });
+    const user = await usersData.getBy({ id: userId });
     const res = await request(server)
       .post('/api/auth/login')
       .send({
@@ -35,7 +36,7 @@ describe('User routes', () => {
 
     describe('when logged in', () => {
       it("should respond with a user's stories", async () => {
-        const userStories = await db.stories.getUserStories(userId);
+        const userStories = await storiesData.getUserStories(userId);
         let res = await request(server)
           .get('/api/user/stories')
           .set('Authorization', userToken)
@@ -60,11 +61,11 @@ describe('User routes', () => {
       let createdStoryId;
 
       afterAll(async () => {
-        await db.stories.delete(createdStoryId);
+        await storiesData.delete(createdStoryId);
       });
 
       it('should create a story', async () => {
-        const userStories = await db.stories.getUserStories(userId);
+        const userStories = await storiesData.getUserStories(userId);
 
         let res = await request(server)
           .post('/api/user/stories')
@@ -87,7 +88,7 @@ describe('User routes', () => {
 
         createdStoryId = res.body.id;
 
-        const userStoriesUpdated = await db.stories.getUserStories(userId);
+        const userStoriesUpdated = await storiesData.getUserStories(userId);
         expect(userStoriesUpdated).toHaveLength(userStories.length + 1);
       });
 
@@ -116,7 +117,7 @@ describe('User routes', () => {
 
     describe('when logged in', () => {
       it('should delete a story that belongs to a user', async () => {
-        const userStories = await db.stories.getUserStories(userId);
+        const userStories = await storiesData.getUserStories(userId);
 
         let res = await request(server)
           .post('/api/user/stories')
@@ -132,12 +133,12 @@ describe('User routes', () => {
           .set('Authorization', userToken)
           .expect(204);
 
-        const userStoriesAfterDelete = await db.stories.getUserStories(userId);
+        const userStoriesAfterDelete = await storiesData.getUserStories(userId);
         expect(userStoriesAfterDelete).toHaveLength(userStories.length);
       });
 
       it('should not delete a story that does not belong to a user', async () => {
-        const allStories = await db.stories.getAll();
+        const allStories = await storiesData.getAll();
         const storyId = allStories.filter(s => s.id !== userId)[0].id;
         let res = await request(server)
           .delete(`/api/user/stories/${storyId}`)
@@ -168,7 +169,7 @@ describe('User routes', () => {
 
     describe('when logged in', () => {
       it('should update a story that belongs to a user', async () => {
-        const userStories = await db.stories.getUserStories(userId);
+        const userStories = await storiesData.getUserStories(userId);
         const story = userStories[0];
         await request(server)
           .put(`/api/user/stories/${story.id}`)
@@ -182,7 +183,7 @@ describe('User routes', () => {
       });
 
       it('should should validate a story to be updated', async () => {
-        const userStories = await db.stories.getUserStories(userId);
+        const userStories = await storiesData.getUserStories(userId);
         const storyId = userStories[0].id;
         await request(server)
           .put(`/api/user/stories/${storyId}`)
@@ -195,7 +196,7 @@ describe('User routes', () => {
       });
 
       it('should not update a story that does not belong to a user', async () => {
-        const allStories = await db.stories.getAll();
+        const allStories = await storiesData.getAll();
         const story = allStories.filter(s => s.id !== userId)[0];
         await request(server)
           .put(`/api/user/stories/${story.id}`)

@@ -1,6 +1,6 @@
 const request = require('supertest');
 const server = require('../../api/server');
-const db = require('../../data/db');
+const usersData = require('../../data/users');
 
 describe('Auth routes', () => {
   const mockUser = {
@@ -13,8 +13,8 @@ describe('Auth routes', () => {
   };
 
   afterAll(async () => {
-    const registeredUser = await db.users.getBy({ username: mockUser.username });
-    await db.users.delete(registeredUser.id);
+    const registeredUser = await usersData.getBy({ username: mockUser.username });
+    await usersData.delete(registeredUser.id);
   });
 
   describe('POST /api/auth/register', () => {
