@@ -28,6 +28,7 @@ describe('User routes', () => {
       it('should respond with 401', async () => {
         let res = await request(server)
           .get('/api/user/stories')
+          .expect('Content-Type', /json/)
           .expect(401);
       });
     });
@@ -38,6 +39,7 @@ describe('User routes', () => {
         let res = await request(server)
           .get('/api/user/stories')
           .set('Authorization', userToken)
+          .expect('Content-Type', /json/)
           .expect(200);
         expect(res.body).toHaveLength(userStories.length);
       });
@@ -49,6 +51,7 @@ describe('User routes', () => {
       it('should respond with 401', async () => {
         let res = await request(server)
           .post('/api/user/stories')
+          .expect('Content-Type', /json/)
           .expect(401);
       });
     });
@@ -67,6 +70,7 @@ describe('User routes', () => {
           .post('/api/user/stories')
           .set('Authorization', userToken)
           .send(mockStory)
+          .expect('Content-Type', /json/)
           .expect(201);
 
         expect(res.body).toEqual(
@@ -94,6 +98,7 @@ describe('User routes', () => {
           .send({
             title: 'Story with invalid data'
           })
+          .expect('Content-Type', /json/)
           .expect(400);
       });
     });
@@ -104,6 +109,7 @@ describe('User routes', () => {
       it('should respond with 401', async () => {
         let res = await request(server)
           .delete('/api/user/stories/5')
+          .expect('Content-Type', /json/)
           .expect(401);
       });
     });
@@ -116,6 +122,7 @@ describe('User routes', () => {
           .post('/api/user/stories')
           .set('Authorization', userToken)
           .send(mockStory)
+          .expect('Content-Type', /json/)
           .expect(201);
 
         const storyId = res.body.id;
@@ -135,6 +142,7 @@ describe('User routes', () => {
         let res = await request(server)
           .delete(`/api/user/stories/${storyId}`)
           .set('Authorization', userToken)
+          .expect('Content-Type', /json/)
           .expect(404);
       });
 
@@ -142,6 +150,7 @@ describe('User routes', () => {
         let res = await request(server)
           .delete(`/api/user/stories/123456789`)
           .set('Authorization', userToken)
+          .expect('Content-Type', /json/)
           .expect(404);
       });
     });
@@ -152,6 +161,7 @@ describe('User routes', () => {
       it('should respond with 401', async () => {
         let res = await request(server)
           .put('/api/user/stories/5')
+          .expect('Content-Type', /json/)
           .expect(401);
       });
     });
@@ -180,6 +190,7 @@ describe('User routes', () => {
           .send({
             title: 'Story with invalid data'
           })
+          .expect('Content-Type', /json/)
           .expect(400);
       });
 
@@ -194,10 +205,11 @@ describe('User routes', () => {
             country: story.country,
             description: story.description
           })
+          .expect('Content-Type', /json/)
           .expect(404);
       });
 
-      it('should not update a story that does not exist', async () => {});
+      // it('should not update a story that does not exist', async () => {});
     });
   });
 });
