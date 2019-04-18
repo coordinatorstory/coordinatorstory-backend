@@ -7,6 +7,7 @@ describe('Story routes', () => {
     it('should respond with 200', async () => {
       let res = await request(server)
         .get('/api/stories')
+        .expect('Content-Type', /json/)
         .expect(200);
     });
 
@@ -27,7 +28,10 @@ describe('Story routes', () => {
 
     it('should return all stories', async () => {
       const stories = await db.stories.getAll();
-      let res = await request(server).get('/api/stories');
+      let res = await request(server)
+        .get('/api/stories')
+        .expect(200)
+        .expect('Content-Type', /json/);
       expect(res.body).toHaveLength(stories.length);
     });
 
@@ -36,7 +40,9 @@ describe('Story routes', () => {
       const countryStories = await db.stories.getCountryStories(country);
       let res = await request(server)
         .get('/api/stories')
-        .query({ country });
+        .query({ country })
+        .expect(200)
+        .expect('Content-Type', /json/);
       expect(res.body).toHaveLength(countryStories.length);
     });
   });
@@ -45,12 +51,14 @@ describe('Story routes', () => {
     it('should get a story', async () => {
       let res = await request(server)
         .get('/api/stories/5')
+        .expect('Content-Type', /json/)
         .expect(200);
     });
 
     it('should not get a story that does not exist', async () => {
       let res = await request(server)
         .get(`/api/stories/123456789`)
+        .expect('Content-Type', /json/)
         .expect(404);
     });
   });

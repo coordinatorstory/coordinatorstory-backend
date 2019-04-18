@@ -2,8 +2,8 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../data/db');
-const validator = require('../middleware/requestValidator');
-const { RequestError } = require('./errors');
+const validator = require('../middleware/dataValidator');
+const { RequestError } = require('../common/errors');
 const { userSchema } = require('../data/schemas');
 
 const authRouter = express.Router();
@@ -44,8 +44,7 @@ async function register(req, res) {
 
 async function login(req, res) {
   const { username, password } = req.body;
-  // TODO check: does this return null already if no user found?
-  const user = username ? await db.users.getBy({ username }) : null;
+  const user = await db.users.getBy({ username });
   const credentialsValid = user && password ? await bcrypt.compare(password, user.password) : false;
 
   if (!credentialsValid) throw new RequestError(401, 'Invalid Credentials.');

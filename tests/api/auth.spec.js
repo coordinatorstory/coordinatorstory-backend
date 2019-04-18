@@ -19,54 +19,61 @@ describe('Auth routes', () => {
 
   describe('POST /api/auth/register', () => {
     it('should register a new user', async () => {
-      let res = await request(server)
+      await request(server)
         .post('/api/auth/register')
         .send(mockUser)
+        .expect('Content-Type', /json/)
         .expect(201);
     });
 
     it('should respond with 400 when username already exists', async () => {
-      let res = await request(server)
+      await request(server)
         .post('/api/auth/register')
         .send(mockUser)
+        .expect('Content-Type', /json/)
         .expect(400);
     });
 
     it('should respond with 400 when not required fields are absent', async () => {
-      let res = await request(server)
+      await request(server)
         .post('/api/auth/register')
         .send({
           username: 'InvalidUser'
         })
+        .expect('Content-Type', /json/)
         .expect(400);
     });
   });
 
   describe('POST /api/auth/login', () => {
     it('should allow a user to log in', async () => {
-      let res = await request(server)
+      await request(server)
         .post('/api/auth/login')
         .send({
           username: mockUser.username,
           password: mockUser.password
         })
+        .expect('Content-Type', /json/)
         .expect(200);
     });
 
     it('should respond with 401 when credentials are invalid', async () => {
-      let res = await request(server)
+      await request(server)
         .post('/api/auth/login')
         .send({
           username: mockUser.username,
           password: 'bad-password'
         })
+        .expect('Content-Type', /json/)
         .expect(401);
-      res = await request(server)
+
+      await request(server)
         .post('/api/auth/login')
         .send({
           username: 'nonexistentUser',
           password: mockUser.password
         })
+        .expect('Content-Type', /json/)
         .expect(401);
     });
   });

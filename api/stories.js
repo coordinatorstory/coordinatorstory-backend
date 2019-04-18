@@ -1,6 +1,6 @@
 const express = require('express');
 const db = require('../data/db');
-const { RequestError } = require('./errors');
+const { RequestError } = require('../common/errors');
 
 const storiesRouter = express.Router();
 
