@@ -4,14 +4,14 @@ const validator = require('../middleware/dataValidator');
 const { RequestError } = require('./errors');
 const { storySchema } = require('../data/schemas');
 
-const usersRouter = express.Router();
+const userRouter = express.Router();
 
-usersRouter.get('/stories', getUserStories);
-usersRouter.post('/stories', validator(storySchema), createUserStory);
-usersRouter.put('/stories/:id', validator(storySchema), updateUserStory);
-usersRouter.delete('/stories/:id', deleteUserStory);
+userRouter.get('/stories', getUserStories);
+userRouter.post('/stories', validator(storySchema), createUserStory);
+userRouter.put('/stories/:id', validator(storySchema), updateUserStory);
+userRouter.delete('/stories/:id', deleteUserStory);
 
-module.exports = usersRouter;
+module.exports = userRouter;
 
 async function getUserStories(req, res) {
   const stories = await db.stories.getUserStories(req.user.id);
