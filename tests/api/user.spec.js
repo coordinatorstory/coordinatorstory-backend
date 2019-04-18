@@ -209,7 +209,14 @@ describe('User routes', () => {
           .expect(404);
       });
 
-      // it('should not update a story that does not exist', async () => {});
+      it('should not update a story that does not exist', async () => {
+        await request(server)
+          .put(`/api/user/stories/123456789`)
+          .set('Authorization', userToken)
+          .send(mockStory)
+          .expect('Content-Type', /json/)
+          .expect(404);
+      });
     });
   });
 });
