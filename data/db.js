@@ -17,13 +17,15 @@ const getAllRecords = tableName => async () => {
 };
 
 const getAllRecordsBy = tableName => async filter => {
-  // TODO throw error if no filter
+  if (!filter) throw new DatabaseError('Filter required to get records by filter');
+
   const records = await db(tableName).where(filter);
   return records;
 };
 
 const getRecordBy = tableName => async filter => {
-  // TODO throw error if no filter
+  if (!filter) throw new DatabaseError('Filter required to get records by filter');
+
   const record = await db(tableName)
     .where(filter)
     .first();
@@ -31,6 +33,8 @@ const getRecordBy = tableName => async filter => {
 };
 
 const createRecord = tableName => async record => {
+  if (!record) throw new DatabaseError('New record object required to create a record');
+
   const [newRecordId] = await db(tableName)
     .insert(record)
     .returning('id');
@@ -41,6 +45,9 @@ const createRecord = tableName => async record => {
 };
 
 const updateRecord = tableName => async (id, record) => {
+  if (!id || !record)
+    throw new DatabaseError('Record ID and record object required to update a record');
+
   const updatedCount = await db(tableName)
     .where({ id })
     .update(record);
@@ -48,6 +55,8 @@ const updateRecord = tableName => async (id, record) => {
 };
 
 const deleteRecord = tableName => async id => {
+  if (!id) throw new DatabaseError('Record ID required to delete a record');
+
   const deletedCount = await db(tableName)
     .where({ id })
     .del();
@@ -64,14 +73,21 @@ const getUsers = async () => {
 // stories
 
 const getUserStories = async id => {
+  if (!id) throw new DatabaseError('Story ID required to get user stories');
+
   return db(STORIES_TABLE).where({ user_id: id });
 };
 
 const getCountryStories = async country => {
+  if (!country) throw new DatabaseError('Country required to get stories by country');
+
   return db(STORIES_TABLE).whereRaw(`lower(country) like '%' || ? || '%'`, country.toLowerCase());
 };
 
 const updateStory = async (userId, storyId, storyUpdates) => {
+  if (!userId || !storyId || !storyUpdates)
+    throw new DatabaseError('User ID, Story ID, and story object required to update a story');
+
   const updatedCount = await db(STORIES_TABLE)
     .where({ id: storyId, user_id: userId })
     .update(storyUpdates);
