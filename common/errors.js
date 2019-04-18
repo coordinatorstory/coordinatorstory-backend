@@ -1,11 +1,19 @@
 class RequestError extends Error {
-  constructor(statusCode, message) {
+  constructor(statusCode = 500, message) {
     super(message);
-    this.statusCode = statusCode || 500;
-    Error.captureStackTrace(this, RequestError);
+    this.name = 'DatabaseError';
+    this.statusCode = statusCode;
+  }
+}
+
+class DatabaseError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'DatabaseError';
   }
 }
 
 module.exports = {
-  RequestError
+  RequestError,
+  DatabaseError
 };
