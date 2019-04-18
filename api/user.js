@@ -1,7 +1,7 @@
 const express = require('express');
 const db = require('../data/db');
 const validator = require('../middleware/dataValidator');
-const { RequestError } = require('./errors');
+const { RequestError } = require('../common/errors');
 const { storySchema } = require('../data/schemas');
 
 const userRouter = express.Router();
