@@ -1,6 +1,6 @@
 const {
-  getAllRecords,
-  getAllRecordsBy,
+  getRecordsList,
+  getRecordsListBy,
   getRecordBy,
   createRecord,
   deleteRecord,
@@ -10,10 +10,10 @@ const {
 const STORIES_TABLE = 'stories';
 
 module.exports = {
-  getAll: getAllRecords(STORIES_TABLE),
+  getAll: getRecordsList(STORIES_TABLE),
   getUserStories,
   getCountryStories,
-  getAllBy: getAllRecordsBy(STORIES_TABLE),
+  getAllBy: getRecordsListBy(STORIES_TABLE),
   getBy: getRecordBy(STORIES_TABLE),
   create: createRecord(STORIES_TABLE),
   update: updateStory,

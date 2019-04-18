@@ -1,5 +1,5 @@
 const {
-  getAllRecordsBy,
+  getRecordsListBy,
   getRecordBy,
   createRecord,
   updateRecord,
@@ -11,7 +11,7 @@ const USERS_TABLE = 'users';
 
 module.exports = {
   getAll: getUsers,
-  getAllBy: getAllRecordsBy(USERS_TABLE),
+  getAllBy: getRecordsListBy(USERS_TABLE),
   getBy: getRecordBy(USERS_TABLE),
   create: createRecord(USERS_TABLE),
   update: updateRecord(USERS_TABLE),

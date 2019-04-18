@@ -8,22 +8,22 @@ const db = knex(config[dbEnv]);
 
 module.exports = {
   db,
-  getAllRecords,
-  getAllRecordsBy,
+  getRecordsList,
+  getRecordsListBy,
   getRecordBy,
   createRecord,
   updateRecord,
   deleteRecord
 };
 
-function getAllRecords(tableName) {
+function getRecordsList(tableName) {
   return async function() {
     const records = await db(tableName);
     return records;
   };
 }
 
-function getAllRecordsBy(tableName) {
+function getRecordsListBy(tableName) {
   return async function(filter) {
     if (!filter) throw new DatabaseError('Filter required to get records by filter');
 
